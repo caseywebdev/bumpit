@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+var bumpit = require('..');
+var fs = require('fs');
+var file = process.cwd() + '/package.json';
+var json = require(file);
+var current = json.version;
+var target = json.version = bumpit(current, process.argv[2], process.argv[3]);
+json = JSON.stringify(json, null, ' ') + '\n';
+fs.writeFile(file, json, function (er) {
+  if (er) throw er;
+  console.log(current + ' -> ' + target);
+});

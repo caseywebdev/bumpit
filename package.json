@@ -1,0 +1,17 @@
+{
+ "name": "bumpit",
+ "version": "0.0.0beta",
+ "author": "Casey Foster <c@sey.me>",
+ "licence": "MIT",
+ "repository": {
+  "type": "git",
+  "url": "https://github.com/caseywebdev/bumpit"
+ },
+ "bin": {
+  "bumpit": "bin/bumpit"
+ },
+ "engines": {
+  "node": "x",
+  "npm": "x"
+ }
+}
