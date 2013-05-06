@@ -2,12 +2,14 @@
 
 var bumpit = require('..');
 var fs = require('fs');
-var file = process.cwd() + '/package.json';
-var json = require(file);
-var current = json.version;
-var target = json.version = bumpit(current, process.argv[2], process.argv[3]);
-json = JSON.stringify(json, null, '  ') + '\n';
-fs.writeFile(file, json, function (er) {
-  if (er) throw er;
-  console.log(current + ' -> ' + target);
-});
+var files = ['package.json', 'bower.json', 'component.json'];
+for (var i = 0, l = files.length; i < l; ++i) {
+  var file = files[i];
+  var json;
+  try { json = require(process.cwd() + '/' + file); } catch (er) { continue; }
+  var current = json.version;
+  var target = json.version = bumpit(current, process.argv[2], process.argv[3]);
+  json = JSON.stringify(json, null, '  ') + '\n';
+  fs.writeFileSync(file, json);
+  console.log(file + ': ' + current + ' -> ' + target);
+}
