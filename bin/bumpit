@@ -9,7 +9,7 @@ for (var i = 0, l = files.length; i < l; ++i) {
   try { json = require(process.cwd() + '/' + file); } catch (er) { continue; }
   var current = json.version;
   var target = json.version = bumpit(current, process.argv[2], process.argv[3]);
-  json = JSON.stringify(json, null, '  ') + '\n';
+  json = JSON.stringify(json, null, 2) + '\n';
   fs.writeFileSync(file, json);
   console.log(file + ': ' + current + ' -> ' + target);
 }
