@@ -1,5 +1,8 @@
 # Bumpit
 
+Easily bump versions for your package.json, bower.json, and/or component.json
+from the command line.
+
 Install
 -------
 
