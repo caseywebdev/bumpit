@@ -2,7 +2,7 @@
   "name": "bumpit",
   "version": "0.0.4",
   "author": "Casey Foster <c@sey.me>",
-  "licence": "MIT",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/caseywebdev/bumpit"
