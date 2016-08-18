@@ -3,29 +3,29 @@
 Easily bump versions for your package.json, bower.json, and/or component.json
 from the command line.
 
-Install
--------
-
 ```bash
 npm install -g bumpit
 ```
 
-bumpit [major|minor|patch|build|tag] [version]
-----
+```
+Usage: bumpit [[major|minor|patch|prerelease [identifier]]|[version]]
+```
 
 ```bash
 > bumpit
-0.0.0 -> 0.0.1
-> bumpit 0.1.2-3
-0.0.1 -> 0.1.2-3
+package.json: 0.0.0 -> 0.0.1
+> bumpit 0.1.2
+package.json: 0.0.1 -> 0.1.2
 > bumpit
-0.1.2-3 -> 0.1.2-4
+package.json: 0.1.2 -> 0.1.3
 > bumpit major
-0.1.2-4 -> 1.0.0
+package.json: 0.1.2-4 -> 1.0.0
 > bumpit minor 3
-1.0.0 -> 1.3.0
-> bumpit 1.4.0alpha
-1.4.0 -> 1.4.0alpha
-> bumpit tag beta
-1.4.0alpha -> 1.4.0beta
+package.json: 1.0.0 -> 1.3.0
+> bumpit 1.4.0-alpha.0
+package.json: 1.4.0 -> 1.4.0-alpha.0
+> bumpit prerelease
+package.json: 1.4.0-alpha.0 -> 1.4.0-alpha.1
+> bumpit prerelease beta
+package.json: 1.4.0-alpha -> 1.4.0-beta
 ```

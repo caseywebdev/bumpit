@@ -1,6 +1,6 @@
 {
   "name": "bumpit",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "author": "Casey Foster <c@sey.me>",
   "license": "MIT",
   "repository": {
@@ -10,8 +10,7 @@
   "bin": {
     "bumpit": "bin/bumpit"
   },
-  "engines": {
-    "node": "x",
-    "npm": "x"
+  "dependencies": {
+    "semver": "5"
   }
 }
