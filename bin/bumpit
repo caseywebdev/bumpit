@@ -8,35 +8,31 @@ const fail = er => {
   process.exit(1);
 };
 
-const check = v => {
-  if (!semver.valid(v)) fail(`Invalid version '${v}'`);
+const getNext = (version, part, id) => {
+  if (!part && !id) return semver.inc(version, 'patch');
+
+  if (part && !id) return semver.inc(version, part) || part;
+
+  let sv;
+  try { sv = semver.SemVer(version); } catch (er) { return; }
+  if (typeof sv[part] === 'string') sv[part] = id;
+  else if (sv[part] instanceof Array) sv[part] = [id];
+  else fail(`Unknown version part '${part}'`);
+  return sv.format();
 };
 
-[
-  'package.json',
-  'bower.json',
-  'component.json'
-].forEach(file => {
+const bumpit = file => {
   let pkg;
   try { pkg = require(`${process.cwd()}/${file}`); } catch (er) { return; }
 
-  const prev = pkg.version || '0.0.0';
+  const version = pkg.version || '0.0.0';
   const {2: part, 3: id} = process.argv;
-  const next = (() => {
-    if (!part && !id) return semver.inc(prev, 'patch');
+  pkg.version = getNext(version, part, id) || version;
 
-    if (part && !id) return semver.inc(prev, part) || part;
+  if (!semver.valid(pkg.version)) fail(`Invalid version '${pkg.version}'`);
 
-    const v = semver.SemVer(prev);
-    if (typeof v[part] === 'string') v[part] = id;
-    else if (v[part] instanceof Array) v[part] = [id];
-    else fail(`Unknown version part '${part}'`);
-    return v.format();
-  })();
-
-  check(next || prev);
-
-  pkg.version = next || prev;
   fs.writeFileSync(file, `${JSON.stringify(pkg, null, 2)}\n`);
-  console.log(`${file}: ${prev} -> ${next}`);
-});
+  console.log(`${file}: ${version} -> ${pkg.version}`);
+};
+
+['package.json', 'bower.json', 'component.json'].forEach(bumpit);
