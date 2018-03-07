@@ -15,7 +15,7 @@ const getNext = (version, part, id) => {
 
   let sv;
   try { sv = semver.SemVer(version); } catch (er) { return; }
-  if (typeof sv[part] === 'string') sv[part] = id;
+  if (typeof sv[part] === 'number') sv[part] = id;
   else if (sv[part] instanceof Array) sv[part] = [id];
   else fail(`Unknown version part '${part}'`);
   return sv.format();
