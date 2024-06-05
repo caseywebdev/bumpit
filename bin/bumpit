@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
-const semver = require('semver');
-const fs = require('fs');
+const { console, process } = globalThis;
+
+import fs from 'node:fs/promises';
+
+import semver from 'semver';
 
 const fail = er => {
   console.error(er);
@@ -14,25 +17,33 @@ const getNext = (version, part, id) => {
   if (part && !id) return semver.inc(version, part) || part;
 
   let sv;
-  try { sv = semver.SemVer(version); } catch (er) { return; }
+  try {
+    sv = semver.SemVer(version);
+  } catch (er) {
+    return;
+  }
   if (typeof sv[part] === 'number') sv[part] = id;
   else if (sv[part] instanceof Array) sv[part] = [id];
   else fail(`Unknown version part '${part}'`);
   return sv.format();
 };
 
-const bumpit = file => {
+const bumpit = async file => {
   let pkg;
-  try { pkg = require(`${process.cwd()}/${file}`); } catch (er) { return; }
+  try {
+    pkg = JSON.parse(await fs.readFile(`${process.cwd()}/${file}`));
+  } catch (er) {
+    return;
+  }
 
   const version = pkg.version || '0.0.0';
-  const {2: part, 3: id} = process.argv;
+  const { 2: part, 3: id } = process.argv;
   pkg.version = getNext(version, part, id) || version;
 
   if (!semver.valid(pkg.version)) fail(`Invalid version '${pkg.version}'`);
 
-  fs.writeFileSync(file, `${JSON.stringify(pkg, null, 2)}\n`);
+  await fs.writeFile(file, `${JSON.stringify(pkg, null, 2)}\n`);
   console.log(`${file}: ${version} -> ${pkg.version}`);
 };
 
-['package.json', 'bower.json', 'component.json'].forEach(bumpit);
+await Promise.all(['package.json', 'bower.json', 'component.json'].map(bumpit));
